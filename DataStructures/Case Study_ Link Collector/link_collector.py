@@ -17,4 +17,4 @@ class LinkCollector:
         print(links)
 
 if __name__ == "__main__":
-    LinkCollector("http://localhost:8000/").collect_links()
+    LinkCollector(sys.argv[1]).collect_links()
