@@ -3,12 +3,12 @@
 # all import
 import datetime
 from collections import namedtuple
+from collections import defaultdict
+from collections import Counter
 from dataclasses import make_dataclass
 from dataclasses import dataclass
 from typing import Any
 from pprint import pprint
-from collections import defaultdict
-from collections import Counter
 import string
 from functools import total_ordering
 from operator import itemgetter
@@ -134,7 +134,7 @@ class MyCounter:
 dict1 = defaultdict(MyCounter().increment)
 dict1["a"][1].append("hello")
 dict1["b"][1].append("world")
-# print(dict1)
+# print(dict1['b'])
 
 dict2 = defaultdict(MyCounter().increment)
 dict2["c"][1].append("Manish")
