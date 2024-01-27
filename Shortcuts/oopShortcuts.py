@@ -83,7 +83,16 @@ class FunkyBackwards:
     
 #---Enumerate Function
     
-filename = sys.argv[1]
+def perfect_num(num):
+    i = 0
+    sum = 0
+    for i in range(1,num):
+        if num %i == 0:
+            sum += i
 
-for index,line in enumerate(filename):
-    print(f"{index+1}: {line}\n",end="")
+    if sum == num:
+        return True
+    else:
+        return False
+    
+print(perfect_num(8469880908))
