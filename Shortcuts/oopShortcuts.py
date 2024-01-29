@@ -1,5 +1,6 @@
 #------------ Python Object Oriente Shortcuts -----------------
 import sys
+import random,string
 # ----------len() function
 myList = [4,1,5,6,8,9]
 # print(len(myList))
@@ -86,7 +87,7 @@ class FunkyBackwards:
 def perfect_num(num):
     i = 0
     sum = 0
-    for i in range(1,num):
+    for i in range(1,num//2):
         if num %i == 0:
             sum += i
 
@@ -95,4 +96,53 @@ def perfect_num(num):
     else:
         return False
     
-print(perfect_num(8469880908))
+# print(perfect_num(8469880908))
+    
+# filename = sys.argv[1]
+
+# for index, value in enumerate(filename):
+#     print(f"{index+1}:{value}")
+
+
+# print(any([1,2,3,4,"str",None]))
+# print(all([1,2,3,4,"str",None]))
+
+contents = ["Ram\n","Bharat\n","Laxman\n","Shatrughan\n"]
+
+try:
+    file = open("Ramayan.txt","w")  #write
+    file.write(contents[0])
+finally:
+    file.close()
+
+try:
+    file2 = open("Ramayan.txt","a") #append
+    for character in contents[1:]:
+        file2.write(character)
+finally:
+    file2.close()
+
+#try (with) object
+characters = []
+with open("Ramayan.txt","r") as file3:
+    for character in file3.readlines():
+        characters.append(character)
+
+characters = [character.replace("\n","") for character in characters]
+
+# print(characters)
+
+
+#my own framework: 
+class StringJoiner(list):
+    def __enter__(self):
+        return self
+    
+    def __exit__(self,type,value,tb):
+        self.result = "".join(self)
+
+with StringJoiner() as joiner:
+    for i in range(15):
+        joiner.append(random.choice(string.ascii_letters))
+
+print(joiner.result)
