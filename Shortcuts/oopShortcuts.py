@@ -145,4 +145,77 @@ with StringJoiner() as joiner:
     for i in range(15):
         joiner.append(random.choice(string.ascii_letters))
 
-print(joiner.result)
+# print(joiner.result)
+
+#----------- An alternative to method overloading--------
+        
+# A function with no arguments
+def no_args():
+    pass
+
+# A function with an arguments
+def mandatory_args(x,y,z):
+    pass
+
+# A function with default arguments
+def dafault_args(x,y,z,a="some strings",b=False):
+    pass
+
+# A function with keyword-only args
+def kw_args(x,y="defaultkw",*,a,b="only"):
+    print(x,y,a,b)
+
+# kw_args("x","manish",a="a")
+    
+# we cannot set default values dynamically
+number = 5
+def funky_fun(number=number):
+    print(number)
+
+number = 6
+# funky_fun(8)  #8
+# funky_fun()  #5
+# print(number) #6
+
+# Be careful with empty containers
+def hello(b=[]):
+    b.append('a')
+    print(b)
+
+# hello()
+# hello()
+# hello()
+# hello()
+    
+#--Variable argument list
+    
+def arbitrary_args(*args):
+    print(args)
+    for i in args:
+        print(i)
+
+# arbitrary_args("manish","vikas","avinash")
+        
+# default keyword argument
+        
+class Options:
+    default_options = {
+        "port":21,
+        "host":"localhost",
+        "username":None,
+        "password":None,
+        "debug":False,
+    }
+
+    def __init__(self,**kwargs):
+        self.options = dict(Options.default_options)
+        self.options.update(kwargs)
+
+    def __getitem__(self,key):
+        return self.options[key]
+    
+
+man = Options(username = "Manish",password="123456789",debug=True)
+# print(man["username"])
+# print(man["password"])
+# print(man["debug"])
