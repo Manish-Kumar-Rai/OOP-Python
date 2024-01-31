@@ -290,7 +290,6 @@ class TimedEvent:
     def ready(self):
         return self.endtime <= datetime.datetime.now()
     
-
 class Timer:
     def __init__(self):
         self.events = []
@@ -308,20 +307,18 @@ class Timer:
             time.sleep(0.5)
 
 
-
-def format_time(message,*args):
+def format_time(message):
     now = datetime.datetime.now()
-    print(f"{now:%I:%M:%S}: {message}")
-
+    print(f"{now:%I:%M:%S} {message}")
 
 def one(timer):
-    format_time("Called one.")
+    print("Called One.")
 
 def two(timer):
-    format_time("Called two.")
+    print("Called two.")
 
 def three(timer):
-    format_time("Called three")
+    print("Called three.")
 
 class Repeater:
     def __init__(self):
@@ -332,15 +329,14 @@ class Repeater:
         self.count += 1
         timer.call_after(5,self.repeater)
 
-
-timer = Timer()
-timer.call_after(1, one)
-timer.call_after(2, one)
-timer.call_after(2, two)
-timer.call_after(4, two)
-timer.call_after(3, three)
-timer.call_after(6, three)
-repeater = Repeater()
-timer.call_after(5, repeater.repeater)
-format_time("Starting")
-timer.run()
+# timer = Timer()
+# timer.call_after(1,one)
+# timer.call_after(2,one)
+# timer.call_after(2,two)
+# timer.call_after(4,two)
+# timer.call_after(3,three)
+# timer.call_after(6,three)
+# repeater = Repeater()
+# timer.call_after(5,repeater.repeater)
+# format_time("Starting")
+# timer.run()
