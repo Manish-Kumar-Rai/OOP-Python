@@ -312,22 +312,22 @@ def format_time(message):
     print(f"{now:%I:%M:%S} {message}")
 
 def one(timer):
-    print("Called One.")
+    format_time("Called One.")
 
 def two(timer):
-    print("Called two.")
+    format_time("Called two.")
 
 def three(timer):
-    print("Called three.")
+    format_time("Called three.")
 
 class Repeater:
     def __init__(self):
         self.count = 0
 
-    def repeater(self,timer):
+    def __call__(self,timer):
         format_time(f"repeat {self.count}")
         self.count += 1
-        timer.call_after(5,self.repeater)
+        timer.call_after(5,self)
 
 # timer = Timer()
 # timer.call_after(1,one)
@@ -340,3 +340,57 @@ class Repeater:
 # timer.call_after(5,repeater.repeater)
 # format_time("Starting")
 # timer.run()
+        
+# Using function as attributes
+class A:
+    def print(self):
+        print("my class is A.")
+
+def fake_print():
+    print("my class is not A.")
+
+# a = A()
+# a.print()
+# a.print = fake_print
+# a.print()
+
+
+#Monkey patching
+class B:
+    def __init__(self):
+        self.my_list = []
+
+    def add(self):
+        self.my_list.append("a")
+
+def monkey_patch(some_object):
+    some_object.my_list = []
+
+# b = B()
+# b.add()
+# b.add()
+# b.add()
+# b.add()
+# print(b.my_list)
+# b.add = monkey_patch
+# b.add(b)
+# print(b.my_list)
+    
+#---- Callable Objects
+    
+class Repeater:
+    def __init__(self):
+        self.count = 0
+
+    def __call__(self,timer):
+        format_time(f"repeat {self.count}")
+        self.count += 1
+        timer.call_after(5,self)
+
+class C:
+    def __call__(self,*args):
+        return " ".join(args)
+    
+c = C()
+# print(c("Manish","Kumar","Rai"))
+
