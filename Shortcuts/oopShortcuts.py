@@ -219,3 +219,19 @@ man = Options(username = "Manish",password="123456789",debug=True)
 # print(man["username"])
 # print(man["password"])
 # print(man["debug"])
+
+#Unpacking arguments
+
+def show_args(arg1,arg2,arg3 = "Three"):
+    print(arg1,arg2,arg3)
+
+some_args = range(3)
+more_args = {
+    "arg1":"One",
+    "arg2":"Two",
+}
+
+print("Unpacking sequence: ",end="")
+show_args(*some_args)
+print("Unpacking dict: ",end="")
+show_args(**more_args)
