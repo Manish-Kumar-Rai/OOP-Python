@@ -1,6 +1,7 @@
 #------------ Python Object Oriente Shortcuts -----------------
 import sys
 import random,string
+import datetime, time
 # ----------len() function
 myList = [4,1,5,6,8,9]
 # print(len(myList))
@@ -231,7 +232,115 @@ more_args = {
     "arg2":"Two",
 }
 
-print("Unpacking sequence: ",end="")
-show_args(*some_args)
-print("Unpacking dict: ",end="")
-show_args(**more_args)
+# print("Unpacking sequence: ",end="")
+# show_args(*some_args)
+# print("Unpacking dict: ",end="")
+# show_args(**more_args)
+
+
+# Funtions are object too
+
+def my_function():
+    print("The function was called.")
+
+my_function.description = "A silly function"
+
+def second_funtion():
+    print("The second function called")
+
+second_funtion.description = "A sillier function"
+
+def another_function(function):
+    print("Function description: ",end="")
+    print(function.description)
+    print("Function name: ",end="")
+    print(function.__name__)
+    print("Function class: ",end="")
+    print(function.__class__)
+    print("Now I'll called the function passed in")
+    function()
+
+# another_function(my_function)
+# print("--------------------------")
+# another_function(second_funtion)
+# print("--------------------------")
+
+def int_add(arr):
+    sum = 0
+    for i in arr:
+        sum += i
+    return sum
+
+def string_concate(arr):
+    return " ".join(arr)
+
+def add(function,*args):
+    return function(args)
+
+# print("Sum: ",add(int_add,4,5,6,7,8,9))
+# print("Fullname: ",add(string_concate,"Manish","Kumar","Rai"))
+
+#----------- timed events--------
+
+class TimedEvent:
+    def __init__(self,endtime,callback):
+        self.endtime = endtime
+        self.callback = callback
+
+    def ready(self):
+        return self.endtime <= datetime.datetime.now()
+    
+
+class Timer:
+    def __init__(self):
+        self.events = []
+
+    def call_after(self,delay,callback):
+        end_time = datetime.datetime.now() + datetime.timedelta(seconds=delay)
+        self.events.append(TimedEvent(end_time,callback))
+
+    def run(self):
+        while True:
+            ready_events = (e for e in self.events if e.ready())
+            for event in ready_events:
+                event.callback(self)
+                self.events.remove(event)
+            time.sleep(0.5)
+
+
+
+def format_time(message,*args):
+    now = datetime.datetime.now()
+    print(f"{now:%I:%M:%S}: {message}")
+
+
+def one(timer):
+    format_time("Called one.")
+
+def two(timer):
+    format_time("Called two.")
+
+def three(timer):
+    format_time("Called three")
+
+class Repeater:
+    def __init__(self):
+        self.count = 0
+
+    def repeater(self,timer):
+        format_time(f"repeat {self.count}")
+        self.count += 1
+        timer.call_after(5,self.repeater)
+
+
+timer = Timer()
+timer.call_after(1, one)
+timer.call_after(2, one)
+timer.call_after(2, two)
+timer.call_after(4, two)
+timer.call_after(3, three)
+timer.call_after(6, three)
+repeater = Repeater()
+timer.call_after(5, repeater.repeater)
+format_time("Starting")
+timer.run()
