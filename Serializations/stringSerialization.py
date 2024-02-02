@@ -4,6 +4,7 @@ import sys
 import re
 import os
 import pathlib
+import pickle
 #------String---------
 
 #--String Manipulation
@@ -156,4 +157,18 @@ def count_sloc(dir_path):
 root_path = pathlib.Path(".")
 
 
-print(count_sloc(root_path))
+# print(count_sloc(root_path))
+
+
+#-------------- Serializing Object --------------
+
+some_data = ["a list", "containing", 5,"values including another list",["inner", "list"]]
+
+with open("pickle_list","wb") as file:
+    pickle.dump(some_data,file)
+
+with open("pickle_list","rb") as file:
+    loaded_data = pickle.load(file)
+
+print(loaded_data)
+assert loaded_data == some_data
