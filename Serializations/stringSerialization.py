@@ -1,5 +1,6 @@
 # ------------------- String and Serialization --------------------------
 import datetime
+import sys
 #------String---------
 
 #--String Manipulation
@@ -97,5 +98,29 @@ orders = [("burger", 2, 5), ("fries", 3.5, 1), ("cola", 1.75, 3)]
 
 # The Formate method
 template = "abc {number:*^10d}"
-print(template.format(number=32))
-print(template.format(number=82))
+# print(template.format(number=32))
+# print(template.format(number=82))
+
+# Strings are Unicode
+characters = b"\x63\x6c\x69\x63\x68\xe9"
+# print(characters)
+# print(characters.decode("iso8859-5"))
+
+characters = "cliché"
+
+# print(characters.encode("utf-8"))
+# print(characters.encode("latin-1"))
+# print(characters.encode("CP437"))
+# print(characters.encode("ascii","xmlcharrefreplace"))
+
+
+# print(sys.getdefaultencoding())
+
+#--Mutable bite strings
+
+b = bytearray(b"abcdefgh")
+# b[4:6] = b"\x15\xa3"
+b[3] = ord(b"g")
+b[4] = 68
+# print(b)
+
