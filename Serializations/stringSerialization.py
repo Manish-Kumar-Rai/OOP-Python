@@ -2,6 +2,8 @@
 import datetime
 import sys
 import re
+import os
+import pathlib
 #------String---------
 
 #--String Manipulation
@@ -125,3 +127,33 @@ b[3] = ord(b"g")
 b[4] = 68
 # print(b)
 
+#-------- FileSystem paths --------------------
+path = os.path.abspath(os.sep.join([".","subdir","subsubdir","file.ext"]))
+# print(path)
+
+path = (pathlib.Path(".")/"subdir"/"subsubdir"/"file.ext").absolute()
+# print(path)
+
+# program to count no. of lines in python code
+
+def count_sloc(dir_path):
+    sloc = 0
+    for path in dir_path.iterdir():
+        if path.name.startswith("."):
+            continue
+        if path.is_dir():
+            sloc += count_sloc(path)
+            continue
+        if path.suffix != ".py":
+            continue
+        with path.open() as file:
+            for line in file:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    sloc += 1
+        return sloc
+    
+root_path = pathlib.Path(".")
+
+
+print(count_sloc(root_path))
