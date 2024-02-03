@@ -243,3 +243,4 @@ data = json.dumps(c,cls=ContactEncoder)
 # print(data)
 c2 = json.loads(data,object_hook=decode_contact)
 # print(c2.first,c2.last,c2.full_name)
+
