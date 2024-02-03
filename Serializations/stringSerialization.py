@@ -5,6 +5,8 @@ import re
 import os
 import pathlib
 import pickle
+import json
+from typing import Any
 
 from urllib.request import urlopen
 from threading import Timer
@@ -205,5 +207,39 @@ class UpdateURL:
         self.__dict__ = data
         self.schedule() 
 
-u = UpdateURL("http://dusty.phillips.codes")
+# u = UpdateURL("http://dusty.phillips.codes")
 # pickle.dumps(u)
+
+#---------- Serializing web objects- ----------------------
+
+class Contact:
+    def __init__(self,first,last):
+        self.first = first
+        self.last = last
+
+    @property
+    def full_name(self):
+        return f"{self.first} {self.last}"
+    
+
+class ContactEncoder(json.JSONEncoder):
+    def default(self,obj):
+        if isinstance(obj,Contact):
+            return {
+                "is_contact": True,
+                "first": obj.first,
+                "last": obj.last,
+                "full": obj.full_name
+            }
+        return super().default(obj)
+    
+def decode_contact(dic):
+    if dic.get("is_contact"):
+        return Contact(dic["first"],dic["last"])
+    return dic
+
+c = Contact("Manish","Rai")
+data = json.dumps(c,cls=ContactEncoder)
+# print(data)
+c2 = json.loads(data,object_hook=decode_contact)
+# print(c2.first,c2.last,c2.full_name)
