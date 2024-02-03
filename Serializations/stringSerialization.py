@@ -5,6 +5,9 @@ import re
 import os
 import pathlib
 import pickle
+
+from urllib.request import urlopen
+from threading import Timer
 #------String---------
 
 #--String Manipulation
@@ -164,11 +167,43 @@ root_path = pathlib.Path(".")
 
 some_data = ["a list", "containing", 5,"values including another list",["inner", "list"]]
 
-with open("pickle_list","wb") as file:
-    pickle.dump(some_data,file)
+# with open("pickle_list","wb") as file:
+#     pickle.dump(some_data,file)
 
-with open("pickle_list","rb") as file:
-    loaded_data = pickle.load(file)
+# with open("pickle_list","rb") as file:
+#     loaded_data = pickle.load(file)
 
-print(loaded_data)
-assert loaded_data == some_data
+# print(loaded_data)
+# assert loaded_data == some_data
+
+#--------- Customizing pickles ----------------
+
+class UpdateURL:
+    def __init__(self,url):
+        self.url = url
+        self.contents = ""
+        last_updated = None
+        self.update()
+
+    def update(self):
+        self.contents = urlopen(self.url).read()
+        self.last_updated = datetime.datetime.now()
+        self.schedule()
+
+    def schedule(self):
+        self.timer = Timer(3600,self.update)
+        self.timer.daemon = True
+        self.timer.start()
+
+    def __getstate__(self):
+        new_state = self.__dict__
+        if "timer" in new_state:
+            del new_state["timer"]
+        return new_state
+    
+    def __setstate__(self,data):
+        self.__dict__ = data
+        self.schedule() 
+
+u = UpdateURL("http://dusty.phillips.codes")
+# pickle.dumps(u)
