@@ -165,5 +165,20 @@ def walk(file):
     else:
         yield file.name
 
-for i in walk(root):
-    print(i)
+# for i in walk(root):
+#     print(i)
+        
+
+#Simple code to understan (yield from) 
+def gen():
+    yield [1,2,3,4,5,6]
+
+def gen2():
+    yield from [1,2,3,4,5,6]
+
+for thing in gen():
+    print(f"Got thing: {thing}")
+
+
+#---- Coroutines --------------
+    
