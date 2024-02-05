@@ -74,6 +74,96 @@ fantasy_authors = {b.author for b in books if b.genre == "fantasy"}
 # --------- Dictionary  Comprehensions ---------------
 
 fantasy_titles = {b.title : b for b in books if b.genre == "fantasy"}
-print(fantasy_titles)
+# print(fantasy_titles)
+
+#------- Generator Expressions--------
+# inname = sys.argv[1]
+# outname = sys.argv[2]
+
+# with open(inname) as infile:
+#     with open(outname,"w") as outfile:
+#         warnings = (line for line in infile if "WARNING" in line)
+#         for l in warnings:
+#             outfile.write(l)
+
+# -------- Generators ---------------------
+# with open(inname) as infile:
+#     with open(outname,"w") as outfile:
+#         warnings = (l.replace("WARNING","") for l in infile if "WARNING" in l) 
+#         for l in warnings:
+#             outfile.write(l)
 
 
+#---Generator Class
+class WarningFilter:
+    def __init__(self,sequence):
+        self.sequence = sequence
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        line = self.sequence.readline()
+        while line and "WARNING" not in line:
+            line = self.sequence.readline()
+        if not line:
+            raise StopIteration()
+        return line.replace("WARNING","")
+    
+# ---True Generator
+def warnings_filter(insequence):
+    for line in insequence:
+        if "WARNING" in line:
+            yield line.replace("WARNING" ,"")
+
+# with open(inname) as infile:
+#     with open(outname,"w") as outfile:
+#         filter = warnings_filter(infile)
+#         for line in filter:
+#             outfile.write(line)
+            
+def warnings_filter2(filename):
+    with open(filename) as infile:
+        yield from (line.replace("WARNING","") for line in infile if "WARNING" in line)
+
+# filter = warnings_filter2(inname)
+# with open(outname,"w") as outfile:
+#     for line in filter:
+#         outfile.write(line)
+        
+# ----- Walking a general tree problem -----------------
+        
+class File:
+    def __init__(self,name):
+        self.name = name
+
+class Folder(File):
+    def __init__(self,name):
+        super().__init__(name)
+        self.childern = []
+
+root = Folder("")
+etc = Folder("etc")
+root.childern.append(etc)
+etc.childern.append(File("passwd"))
+etc.childern.append(File("groups"))
+httpd = Folder("httpd")
+etc.childern.append(httpd)
+httpd.childern.append(File("http.conf"))
+var = Folder("var")
+root.childern.append(var)
+log = Folder("log")
+var.childern.append(log)
+log.childern.append(File("message"))
+log.childern.append(File("kernel"))
+
+def walk(file):
+    if isinstance(file,Folder):
+        yield file.name + "/"
+        for f in file.childern:
+            yield from walk(f)
+    else:
+        yield file.name
+
+for i in walk(root):
+    print(i)
