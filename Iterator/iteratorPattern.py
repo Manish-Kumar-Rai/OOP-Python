@@ -1,6 +1,7 @@
 #--------------- The Iterator Pattern ----------------------
 
 import sys
+from collections import namedtuple
 #-- The iterator Protocol
 
 class CapitalIterable:
@@ -55,6 +56,24 @@ output_integers = []
 output_integers = [int(num) for num in input_strings if len(num) < 3]
 # print(output_integers," = ",sum(output_integers))
 
+#--------------- Set Comprehensions --------------------
+Book = namedtuple("Book",["author","title","genre"])
 
+books = [Book("Pratchett", "Nightwatch", "fantasy"),
+         Book("Pratchett", "Thief Of Time", "fantasy"),
+         Book("Le Guin", "The Dispossessed", "scifi"),
+         Book("Le Guin", "A Wizard Of Earthsea", "fantasy"),
+         Book("Turner", "The Thief", "fantasy"),
+         Book("Phillips", "Preston Diamond", "western"),
+         Book("Phillips", "Twice Upon A Time", "scifi"),
+         ]
+
+fantasy_authors = {b.author for b in books if b.genre == "fantasy"}
+# print(fantasy_authors)
+
+# --------- Dictionary  Comprehensions ---------------
+
+fantasy_titles = {b.title : b for b in books if b.genre == "fantasy"}
+print(fantasy_titles)
 
 
