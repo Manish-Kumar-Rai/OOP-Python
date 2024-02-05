@@ -1,5 +1,5 @@
 #--------------- The Iterator Pattern ----------------------
-
+import re
 import sys
 from collections import namedtuple
 #-- The iterator Protocol
@@ -176,9 +176,56 @@ def gen():
 def gen2():
     yield from [1,2,3,4,5,6]
 
-for thing in gen():
-    print(f"Got thing: {thing}")
+# for thing in gen():
+#     print(f"Got thing: {thing}")
 
 
 #---- Coroutines --------------
+
+def tally():
+    score = 0
+    while True:
+        increment = yield score
+        score += increment
+        
+
+# white_sox = tally()
+# print(next(white_sox))
+# print(white_sox.send(3))
+# print(white_sox.send(3))
+# print(white_sox.send(3))
+
+
+# find error drive
+
+def match_regex(filename,regex):
+    with open(filename) as file:
+        lines = file.readlines()
+
+    for line in reversed(lines):
+        match = re.match(regex,line)
+        if match:
+            regex = yield match.groups()[0]
+
+
+def get_serials(filename):
+    ERROR_RE = "XFS ERROR (\[sd[a-z]\])"
+    matcher = match_regex(filename,ERROR_RE)
+    device = next(matcher)
+    while True:
+        try:
+            bus = matcher.send(
+                "(sd \S+) {}.*".format(re.escape(device))
+            )
+
+            serial = matcher.send("{} \(SERIAL=([^)]*)\)".format(bus))
+            yield serial
+            device = matcher.send(ERROR_RE)
+        except StopIteration:
+            matcher.close()
+            return
+        
+# for serial_number in get_serials("kernel.log"):
+#     print(serial_number)
+
     
