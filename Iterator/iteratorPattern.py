@@ -1,6 +1,6 @@
 #--------------- The Iterator Pattern ----------------------
 
-
+import sys
 #-- The iterator Protocol
 
 class CapitalIterable:
@@ -39,3 +39,22 @@ iterator = iter(iterable)
 #simple syntax
 # for i in iterator:
 #     print(i,end=" ")
+
+#------- List Comprehensions --------------------
+
+# def convertToNumber(num):
+#     return int(num)
+input_strings = ["1", "5", "28", "131", "3"]
+# print(input_strings)
+# output_integers = map(convertToNumber,input_strings)
+output_integers = []
+# for i in input_strings:
+#     output_integers.append(int(i))
+# print(output_integers," = ",sum(output_integers))
+
+output_integers = [int(num) for num in input_strings if len(num) < 3]
+# print(output_integers," = ",sum(output_integers))
+
+
+
+
