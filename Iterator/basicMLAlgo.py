@@ -1,54 +1,58 @@
-#--------------- Basic Maching Learning Algorithm ------------------------
-
+# ---------------------- Basic ML(k-nearest) Algo------------------
 import csv
-import random
-import tkinter as tk
+from random import randint
+from collections import Counter
 
-class Application(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.grid(sticky="news")
-        master.columnconfigure(0, weight=1)
-        master.rowconfigure(0, weight=1)
-        self.create_widgets()
-        self.file = csv.writer(open("colors.csv", "a"))
+dataset_file = "colors.csv"
 
-    def create_color_button(self, label, column, row):
-        button = tk.Button(
-            self, command=lambda: self.click_color(label), text=label
+def load_colors(data_file):
+    with open(data_file) as file:
+        lines = csv.reader(file)
+        for line in lines:
+            if len(line) == 0:
+                continue
+            label, hex_color = line
+            yield (hex_to_rgb(hex_color),label)
+
+def hex_to_rgb(hex_color):
+    return tuple(int(hex_color[i:i+2],16) for i in range(1,6,2))
+
+def generate_colors(count=100):
+    for i in range(count):
+        yield (randint(0,255),randint(0,255),randint(0,255))
+
+def color_distance(color1, color2):
+    channels = zip(color1, color2)
+    sum_distance_squared = 0
+    for c1, c2 in channels:
+        sum_distance_squared += (c1 - c2) ** 2
+    return sum_distance_squared
+
+def nearest_neighbors(model_colors,target_colors,num_neighbors =5):
+    model_colors = list(model_colors)
+
+    for target in target_colors:
+        distances = sorted(
+            ((color_distance(c[0], target), c) for c in model_colors)
             )
-        button.grid(column=column, row=row, sticky="news")
+        yield target, distances[:5]
 
-    def random_color(self):
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        return f"#{r:02x}{g:02x}{b:02x}"
-    
-    def create_widgets(self):
-        self.color_box = tk.Label(
-            self, bg=self.random_color(), width="30", height="15"
-            )
-        self.color_box.grid(
-            column=0, columnspan=2, row=0, sticky="news"
-        )
-        self.create_color_button("Red", 0, 1)
-        self.create_color_button("Purple", 1, 1)
-        self.create_color_button("Blue", 0, 2)
-        self.create_color_button("Green", 1, 2)
-        self.create_color_button("Yellow", 0, 3)
-        self.create_color_button("Orange", 1, 3)
-        self.create_color_button("Pink", 0, 4)
-        self.create_color_button("Grey", 1, 4)
-        self.quit = tk.Button(
-            self, text="Quit", command=root.destroy, bg="#ffaabb"
-            )
-        self.quit.grid(column=0, row=5, columnspan=2, sticky="news")
+def name_colors(model_colors,target_colors,num_neighbors=5):
+    for target, near in nearest_neighbors(model_colors,target_colors,num_neighbors):
+        print(target,near)
+        name_guess = Counter(n[1] for n in near).most_common()[0][0]
+        yield target, name_guess
 
-    def click_color(self, label):
-        self.file.writerow([label, self.color_box["bg"]])
-        self.color_box["bg"] = self.random_color()
+def write_results(colors,filename="output.csv"):
+    with open(filename,"w") as file:
+        writer = csv.writer(file)
+        for (r,g,b), name in colors:
+            writer.writerow([name,f"#{r:02x}{b:02x}{g:02x}"])
 
-root = tk.Tk()
-app = Application(master=root)
-app.mainloop()
+def process_colors(dataset_file="colors.csv"):
+    model_colors = load_colors(dataset_file)
+    colors = name_colors(model_colors,generate_colors(),5)
+    write_results(colors)
+
+if __name__ == "__main__":
+    process_colors()
