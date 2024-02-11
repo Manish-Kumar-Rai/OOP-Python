@@ -68,3 +68,8 @@ class UserGrossQuery(QueryTemplate):
         with open(filename,"w") as outfile:
             outfile.write(self.formatted_results)
 
+# nv = NewVehicleQuery()
+# nv.process_format()
+
+# gross_sales = UserGrossQuery()
+# gross_sales.process_format()
