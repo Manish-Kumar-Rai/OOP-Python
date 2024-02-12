@@ -28,8 +28,8 @@ class DateAgeAdaptor:
         self.date = self._str_date(date)
         return self.calculator.calculateAge(self.date)
     
-# adaptor = DateAgeAdaptor(datetime.datetime(1998,2,25))
-# print(adaptor.get_age(datetime.datetime(2024,2,26)))
+# adaptor = DateAgeAdaptor(datetime.date(1998,2,25))
+# print(adaptor.get_age(datetime.date(2024,2,26)))
 
 #--------Using Inheritence
 
