@@ -1,0 +1,1 @@
+#---------------- The Abstract factory pattern --------------------
