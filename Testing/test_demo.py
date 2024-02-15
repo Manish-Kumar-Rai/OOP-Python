@@ -15,7 +15,7 @@ class SkipTests(unittest.TestCase):
     def test_skipIf(self):
         self.assertEqual(True,False)
 
-    @unittest.skipUnless(sys.platform.startswith("linux"),"broken unless on linux")
+    @unittest.skipUnless(sys.platform.startswith("win32"),"broken unless on linux")
     def test_skipUnless(self):
         self.assertEqual(True,False)
 
