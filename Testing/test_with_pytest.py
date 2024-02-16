@@ -79,8 +79,8 @@ import sys
 # def test_python3():
 #     assert b"hello".decode() == "hello"
 
-name= "manishrai"
+# name= "manishrai"
 
-@pytest.mark.xfail("name == 'manish'")
-def test_fails():
-    assert 3 == 3
+# @pytest.mark.xfail("name == 'manish'")
+# def test_fails():
+#     assert 3 == 3
