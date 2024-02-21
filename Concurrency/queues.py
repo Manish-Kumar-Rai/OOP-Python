@@ -1,9 +1,9 @@
 #-----------------------   Queues ------------------------
 
-def search(paths,query_q,result_q):
+def search(paths,query_q, result_q):
     lines = []
     for path in paths:
-        lines.extend(l.strip() for l in path.open())
+        lines.extend(l for l in path.open())
 
     query = query_q.get()
     while query:
@@ -19,9 +19,9 @@ if __name__ == "__main__":
     pathnames = [f for f in Path(".").iterdir() if f.isfile()]
     paths = [pathnames[i::cpus] for i in range(cpus)]
     query_queues = [Queue() for _ in range(cpus)]
-    result_queues = Queue()
+    result_queue = Queue()
     search_procs = [
-        Process(target=search, args=(p,q,result_queues))
+        Process(target=search,args=(p,q,result_queue))
         for p, q in zip(paths,query_queues)
     ]
 
@@ -32,8 +32,8 @@ if __name__ == "__main__":
         q.put("def")
         q.put(None)
 
-    for i in range(cpus):
-        for match in result_queues.get():
+    for _ in range(cpus):
+        for match in result_queue.get():
             print(match)
 
     for proc in search_procs:
